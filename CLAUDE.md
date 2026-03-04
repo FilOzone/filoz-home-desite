@@ -81,6 +81,23 @@ filecoin-pin add ./public/ --mainnet --provider-id 1
 
 Use `--disableFastRender` — Hugo's Fast Render mode caches templates and won't reflect template changes without a full restart.
 
+## Deployment
+
+GitHub Actions on push to `main` (`.github/workflows/deploy.yaml`):
+1. Hugo build with minification
+2. Deploy to GitHub Pages → https://desite.filoz.org
+3. Pin to Filecoin mainnet via `npx filecoin-pin@0.17.0` (Provider ID 1, ezpdpz-main)
+4. Update DNSLink TXT record at deSEC
+
+**GitHub Secrets:** `FILECOIN_PRIVATE_KEY`, `DESEC_TOKEN`
+
+**DNS (deSEC — `desite.filoz.org` zone):**
+- A records → GitHub Pages IPs (185.199.108-111.153)
+- `_dnslink` TXT → updated automatically by workflow
+
+**DNS (GoDaddy — `filoz.org`):**
+- NS `desite` → `ns1.desec.io` / `ns2.desec.org`
+
 ## Filecoin Pinning (Mainnet)
 
 - **Tool:** filecoin-pin v0.17.0 (v0.7.2 uses incompatible contracts)
