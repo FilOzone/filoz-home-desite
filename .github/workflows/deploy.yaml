@@ -115,26 +115,29 @@ jobs:
           echo "CID=$CID" >> $GITHUB_ENV
           echo "Site pinned. CID: $CID"
 
-      - name: Update DNSLink at GoDaddy
+      - name: Update DNSLink at deSEC
         env:
-          GODADDY_KEY: ${{ secrets.GODADDY_KEY }}
-          GODADDY_SECRET: ${{ secrets.GODADDY_SECRET }}
+          DESEC_TOKEN: ${{ secrets.DESEC_TOKEN }}
         run: |
           CID="${{ env.CID }}"
-          DOMAIN="filoz.org"
-          RECORD_NAME="_dnslink.desite"
+          DOMAIN="desite.filoz.org"
 
-          echo "Updating DNSLink TXT record for ${DOMAIN}..."
+          echo "Updating DNSLink TXT record at deSEC..."
 
-          RESPONSE=$(curl -s -w "\n%{http_code}" -X PUT \
-            "https://api.godaddy.com/v1/domains/${DOMAIN}/records/TXT/${RECORD_NAME}" \
-            -H "Authorization: sso-key ${GODADDY_KEY}:${GODADDY_SECRET}" \
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X PATCH \
+            "https://desec.io/api/v1/domains/${DOMAIN}/rrsets/" \
+            -H "Authorization: Token ${DESEC_TOKEN}" \
             -H "Content-Type: application/json" \
-            -d '[{"data": "dnslink=/ipfs/'${CID}'", "ttl": 3600}]')
+            -d '[{
+              "subname": "_dnslink",
+              "type": "TXT",
+              "ttl": 3600,
+              "records": ["\"dnslink=/ipfs/'${CID}'\""]
+            }]')
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
 
-          if [ "$HTTP_CODE" -eq 200 ]; then
+          if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
             echo "Successfully updated DNSLink to: dnslink=/ipfs/${CID}"
           else
             echo "Failed to update DNSLink. HTTP Code: ${HTTP_CODE}"
