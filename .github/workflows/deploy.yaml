@@ -124,16 +124,13 @@ jobs:
 
           echo "Updating DNSLink TXT record at deSEC..."
 
+          JSON='[{"subname": "_dnslink", "type": "TXT", "ttl": 3600, "records": ["\"dnslink=/ipfs/'"${CID}"'\""] }]'
+
           RESPONSE=$(curl -s -w "\n%{http_code}" -X PATCH \
             "https://desec.io/api/v1/domains/${DOMAIN}/rrsets/" \
             -H "Authorization: Token ${DESEC_TOKEN}" \
             -H "Content-Type: application/json" \
-            -d '[{
-              "subname": "_dnslink",
-              "type": "TXT",
-              "ttl": 3600,
-              "records": ["\"dnslink=/ipfs/'${CID}'\""]
-            }]')
+            -d "${JSON}")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
 
