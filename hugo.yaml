@@ -1,0 +1,58 @@
+baseURL: ""
+relativeURLs: true
+title: FilOz
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+pygmentsUseClasses: true
+
+minify:
+  disableXML: true
+
+pagination:
+  pagerSize: 10
+
+languages:
+  en:
+    languageName: "English"
+    weight: 1
+    taxonomies:
+      category: categories
+      tag: tags
+      series: series
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+params:
+  env: production
+  title: FilOz
+  description: "Empowering the Future of Decentralized Storage"
+  author: FilOz
+
+  label:
+    text: "FilOz"
+    icon: /images/logos/symbol.svg
+
+  socialIcons:
+    - name: twitter
+      url: "https://x.com/_FilOz"
+    - name: github
+      url: "https://github.com/filecoin-project/lotus"
+    - name: slack
+      url: "https://filecoinproject.slack.com/archives/CP50PPW2X"
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    style: monokai

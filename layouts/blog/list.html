@@ -1,0 +1,81 @@
+{{ define "main" }}
+        <main class="main-wrapper">
+            <section class="section_hero">
+                <div class="padding-global padding-section-xhuge">
+                    <div class="container-large">
+                        <div class="text-align-center">
+                            <div class="w-layout-vflex header-wrapper">
+                                <div class="margin-bottom margin-small"><img src="/images/logos/symbol.svg" loading="lazy" style="opacity: 1; transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; will-change: transform;" data-w-id="ca089ab9-3bbc-4947-7087-52763d0f170c" alt="logo" class="main-icon"></div>
+                                <div data-w-id="ca089ab9-3bbc-4947-7087-52763d0f170d" style="opacity: 1;" class="margin-bottom margin-small">
+                                    <div class="w-layout-hflex flex-first-title">
+                                        <h1 class="heading-style-h1 bold-header">FilOz Blog<br></h1>
+                                    </div>
+                                </div>
+                                <div data-w-id="9fd883ce-f9e1-42b1-3f4f-7c536a0fefe6" style="opacity: 1; will-change: opacity;" class="max-width-xlarge">
+                                    <p class="text-size-medium">Your window into the latest ideas, updates, and innovations from the FilOz team<br>Published directly on the <a href="https://www.filecoin.cloud/" target="_blank" class="light-blue" style="text-decoration: none;">Filecoin Onchain Cloud</a> and powered by <a href="https://ipfs.tech/" target="_blank" class="light-blue" style="text-decoration: none;">IPFS</a> for true decentralization</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ partial "grid-animation.html" . }}
+                <div class="lottie-left" data-w-id="0c633669-1964-b6a9-99bf-c4425d2a3c3f" data-animation-type="lottie" data-src="/lottie/hero1.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="8.508508161949873" data-duration="0"></div>
+                <div class="lottie-right" data-w-id="7d5d80e0-5c92-2900-897e-23c308b00c1a" data-animation-type="lottie" data-src="/lottie/hero2.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="8.508508161949873" data-duration="0"></div>
+            </section>
+            <section id="events" class="section_event">
+                <div class="padding-global padding-section-large">
+                    <div class="container-large">
+                        <div class="w-dyn-list">
+                            <div role="list" class="collection-list w-dyn-items">{{ range .Pages.ByDate.Reverse }}
+                                <div role="listitem" class="w-dyn-item"><a href="{{ .RelPermalink }}" class="event_featured-item intern w-inline-block">
+                                        <div id="w-node-d8dc9bbf-a8a5-19ca-2e82-96866c783b60-75e009ad" class="event-image">{{ $img := "" }}{{ with .Params.featured_image }}{{ $img = . }}{{ else }}{{ with .Params.image }}{{ $img = . }}{{ else }}{{ with .Params.cover }}{{ $img = . }}{{ else }}{{ $img = "/images/blog/filoz-avatar.png" }}{{ end }}{{ end }}{{ end }}<img src="{{ $img }}" loading="lazy" alt="{{ .Title }}" style="width: 100%; height: 100%; object-fit: cover; object-position: center;"></div>
+                                        <div class="event_featured-item-content intern">
+                                            <div class="margin-bottom margin-small">
+                                                <h2 blocks-non-deletable="true" class="text-size-large light-blue">{{ .Title }}</h2>
+                                            </div>
+                                            <p class="text-size-regular gray-soft">{{ with .Description }}{{ . | plainify | truncate 200 }}{{ else }}{{ .Summary | plainify | truncate 200 }}{{ end }}</p>
+                                            <div class="margin-top margin-xmedium">
+                                                <div class="event_multi-image-item">
+                                                    <div class="text-size-small black">By:</div>
+                                                    <div class="w-layout-hflex company-name-wrap">
+                                                        <div class="text-size-small gray">{{ with .Params.author }}{{ . }}{{ else }}FilOz{{ end }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="margin-top margin-small">
+                                                <div class="event_tag-wrapper">
+                                                    <div class="w-layout-vflex tags-wrapper">
+                                                        <div class="tag">
+                                                            <div class="event-header6_icon-wrapper">
+                                                                <div class="icon-embed-xsmall w-embed"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <g clip-path="url(#clip0_13123_2689)">
+                                                                            <path d="M6 3V6L8 7M11 6C11 8.76142 8.76142 11 6 11C3.23858 11 1 8.76142 1 6C1 3.23858 3.23858 1 6 1C8.76142 1 11 3.23858 11 6Z" stroke="#0090FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                        </g>
+                                                                        <defs>
+                                                                            <clipPath id="clip0_13123_2689">
+                                                                                <rect width="12" height="12" fill="white"></rect>
+                                                                            </clipPath>
+                                                                        </defs>
+                                                                    </svg></div>
+                                                            </div>
+                                                            <div class="text-size-small">{{ .Date.Format "Jan 2, 2006" }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="button-group-3">
+                                                        <div data-w-id="fe217615-cfbd-e2e5-97b1-59f8ed50f87f" class="arrow-button pad">
+                                                            <div class="title-wrapper">
+                                                                <p class="button-title">Read More</p>
+                                                                <div class="arrow-wrapper"><img alt="arrow" src="/images/icons/arrow-up-right.svg" class="button-arrow"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a></div>
+                                {{ end }}
+                            </div>
+                        </div>
+                    </div>
+            </section>
+{{ end }}

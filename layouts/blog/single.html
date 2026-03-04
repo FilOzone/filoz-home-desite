@@ -1,0 +1,57 @@
+{{ define "main" }}
+        <main class="main-wrapper">
+            <section class="section_hero">
+                <div class="padding-global padding-section-xhuge">
+                    <div class="container-large">
+                        <div class="text-align-center">
+                            <div class="w-layout-vflex header-wrapper">
+                                <div class="margin-bottom margin-small"><img src="/images/logos/symbol.svg" loading="lazy" style="opacity: 1; transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d; will-change: transform;" data-w-id="ca089ab9-3bbc-4947-7087-52763d0f170c" alt="logo" class="main-icon"></div>
+                                <div data-w-id="ca089ab9-3bbc-4947-7087-52763d0f170d" style="opacity: 1;" class="margin-bottom margin-small">
+                                    <div class="w-layout-hflex flex-first-title">
+                                        <h1 class="heading-style-h1 bold-header">FilOz Blog<br></h1>
+                                    </div>
+                                </div>
+                                <div class="margin-top margin-xmedium">
+                                    <div data-w-id="9c5c80db-1b47-6d11-024d-3acc62b99837" style="opacity: 1;" class="button-group align-center"><a data-w-id="ed2017a9-011d-406e-eac9-69e1cd5154c2" href="/blog" class="button-primary w-inline-block">
+                                            <div class="button-text">Back</div>
+                                            <div style="transform: translate3d(-25%, -37.5%, 0px) scale3d(0, 0, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;" class="button-78-box"></div>
+                                        </a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ partial "grid-animation.html" . }}
+                <div class="lottie-left" data-w-id="0c633669-1964-b6a9-99bf-c4425d2a3c3f" data-animation-type="lottie" data-src="/lottie/hero1.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="8.508508161949873" data-duration="0"></div>
+                <div class="lottie-right" data-w-id="7d5d80e0-5c92-2900-897e-23c308b00c1a" data-animation-type="lottie" data-src="/lottie/hero2.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="8.508508161949873" data-duration="0"></div>
+            </section>
+            <section id="events" class="section_event">
+                <div class="padding-global padding-section-large">
+                    <div class="container-large">
+                        <div class="w-dyn-list">
+                            <div role="list" class="collection-list w-dyn-items">
+                                <div role="listitem" class="w-dyn-item">
+                                    <div class="event_featured-item intern">
+                                        <div class="event_featured-item-content intern">
+                                            <div class="margin-bottom margin-small">
+                                                <h1 blocks-non-deletable="true" class="heading-style-h2 light-blue">{{ .Title }}</h1>
+                                            </div>
+                                            <div class="margin-bottom margin-medium"><span class="text-size-small black">By: </span><span class="text-size-small gray">{{ with .Params.author }}{{ . }}{{ else }}FilOz{{ end }}</span><span style="margin: 0 0.5rem; color: #999;">•</span><span class="text-size-small"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 0.25rem;">
+                                                        <g clip-path="url(#clip0_13123_2689)">
+                                                            <path d="M6 3V6L8 7M11 6C11 8.76142 8.76142 11 6 11C3.23858 11 1 8.76142 1 6C1 3.23858 3.23858 1 6 1C8.76142 1 11 3.23858 11 6Z" stroke="#0090FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_13123_2689">
+                                                                <rect width="12" height="12" fill="white"></rect>
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>{{ .Date.Format "Jan 2, 2006" }}</span></div>
+                                            <div class="margin-top margin-medium text-rich-text w-richtext">{{ .Content }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+{{ end }}
