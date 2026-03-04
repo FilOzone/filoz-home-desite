@@ -83,16 +83,11 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Install Filecoin Pin CLI
-        run: |
-          npm install -g filecoin-pin@0.17.0
-          filecoin-pin --version
-
       - name: Configure Filecoin Pin payments
         env:
           PRIVATE_KEY: ${{ secrets.FILECOIN_PRIVATE_KEY }}
         run: |
-          if filecoin-pin payments setup --auto --mainnet; then
+          if npx filecoin-pin@0.17.0 payments setup --auto --mainnet; then
             echo "Payment configuration complete"
           else
             echo "Payment configuration failed"
@@ -103,7 +98,7 @@ jobs:
         env:
           PRIVATE_KEY: ${{ secrets.FILECOIN_PRIVATE_KEY }}
         run: |
-          OUTPUT=$(filecoin-pin add ./public/ --mainnet --provider-id 1 2>&1)
+          OUTPUT=$(npx filecoin-pin@0.17.0 add ./public/ --mainnet --provider-id 1 2>&1)
           EXIT_CODE=$?
 
           echo "=== Filecoin Pin Output ==="
