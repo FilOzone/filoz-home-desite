@@ -127,7 +127,7 @@ jobs:
         run: |
           CID="${{ env.CID }}"
           DOMAIN="filoz.org"
-          RECORD_NAME="_dnslink"
+          RECORD_NAME="_dnslink.desite"
 
           echo "Updating DNSLink TXT record for ${DOMAIN}..."
 
@@ -153,6 +153,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**CID:** \`${{ env.CID }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**GitHub Pages:** https://filoz.org" >> $GITHUB_STEP_SUMMARY
+          echo "**GitHub Pages:** https://desite.filoz.org" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**IPFS:** https://${{ env.CID }}.ipfs.dweb.link" >> $GITHUB_STEP_SUMMARY
