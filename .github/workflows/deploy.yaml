@@ -1,0 +1,158 @@
+name: Build, Deploy to GitHub Pages & Pin to Filecoin
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  HUGO_VERSION: 0.139.3
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        run: |
+          wget -O hugo.tar.gz https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz
+          tar -xzf hugo.tar.gz
+          sudo mv hugo /usr/local/bin/
+          hugo version
+
+      - name: Build Hugo site
+        run: |
+          hugo --gc --minify
+          if [ ! -d "./public/" ] || [ -z "$(ls -A ./public/)" ]; then
+            echo "Error: ./public/ directory is missing or empty."
+            exit 1
+          fi
+          echo "Site built: $(find ./public -type f | wc -l) files"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+      - name: Upload public for pinning job
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-public
+          path: ./public
+
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  pin-to-filecoin:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-public
+          path: ./public
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install Filecoin Pin CLI
+        run: |
+          npm install -g filecoin-pin@0.17.0
+          filecoin-pin --version
+
+      - name: Configure Filecoin Pin payments
+        env:
+          PRIVATE_KEY: ${{ secrets.FILECOIN_PRIVATE_KEY }}
+        run: |
+          if filecoin-pin payments setup --auto --mainnet; then
+            echo "Payment configuration complete"
+          else
+            echo "Payment configuration failed"
+            exit 1
+          fi
+
+      - name: Pin site to Filecoin
+        env:
+          PRIVATE_KEY: ${{ secrets.FILECOIN_PRIVATE_KEY }}
+        run: |
+          OUTPUT=$(filecoin-pin add ./public/ --mainnet --provider-id 1 2>&1)
+          EXIT_CODE=$?
+
+          echo "=== Filecoin Pin Output ==="
+          echo "$OUTPUT"
+          echo "=== End Output (Exit Code: $EXIT_CODE) ==="
+
+          CID=$(echo "$OUTPUT" | grep -oP 'bafyb\w+' | head -1)
+
+          if [ -z "$CID" ]; then
+            echo "Error: Could not extract CID from output"
+            exit 1
+          fi
+
+          echo "CID=$CID" >> $GITHUB_ENV
+          echo "Site pinned. CID: $CID"
+
+      - name: Update DNSLink at GoDaddy
+        env:
+          GODADDY_KEY: ${{ secrets.GODADDY_KEY }}
+          GODADDY_SECRET: ${{ secrets.GODADDY_SECRET }}
+        run: |
+          CID="${{ env.CID }}"
+          DOMAIN="filoz.org"
+          RECORD_NAME="_dnslink"
+
+          echo "Updating DNSLink TXT record for ${DOMAIN}..."
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X PUT \
+            "https://api.godaddy.com/v1/domains/${DOMAIN}/records/TXT/${RECORD_NAME}" \
+            -H "Authorization: sso-key ${GODADDY_KEY}:${GODADDY_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d '[{"data": "dnslink=/ipfs/'${CID}'", "ttl": 3600}]')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "Successfully updated DNSLink to: dnslink=/ipfs/${CID}"
+          else
+            echo "Failed to update DNSLink. HTTP Code: ${HTTP_CODE}"
+            echo "$RESPONSE"
+            exit 1
+          fi
+
+      - name: Deployment summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**CID:** \`${{ env.CID }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**GitHub Pages:** https://filoz.org" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**IPFS:** https://${{ env.CID }}.ipfs.dweb.link" >> $GITHUB_STEP_SUMMARY
