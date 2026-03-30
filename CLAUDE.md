@@ -116,6 +116,12 @@ Medium export zip contains HTML files in `posts/`. To convert:
 5. Em dashes in Medium HTML (`—`) → double hyphens (`--`) per user preference
 6. Filename: `YYYY-MM-DD_Title-Slug-MEDIUM_ID.md`
 
+## Updating Events
+
+Fetch https://www.filoz.org/events to get current dates, times, and Luma links from the live Webflow site (source of truth). Update both:
+- `layouts/events/list.html` — all 3 event cards (date, time, Luma URL)
+- `layouts/index.html` ~line 1113 — homepage featured event (date, time, Luma URL)
+
 ## Content Update Guide
 
 - `SKILL.md` — AI assistant guide for making content updates (team, blog, events, resources)
