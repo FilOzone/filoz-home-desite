@@ -10,7 +10,7 @@ featured_image: /images/blog/foc-design-to-reality.png
 
 ![](/images/blog/foc-design-to-reality.png)
 
-Luca Nizzardo
+Luca Nizzardo ([@lucaniz_](https://x.com/lucaniz_))
 
 As Filecoin Onchain Cloud (FOC) approaches mainnet readiness, **payments are beginning to flow**. For the first time, Filecoin is earning from actual infrastructure usage.
 
