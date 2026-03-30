@@ -1,6 +1,6 @@
 # FilOz Home DeSite
 
-Decentralized Hugo static clone of filoz.org. Preserves exact Webflow HTML/CSS/JS — only CDN URLs changed to local paths. Deblog (24 posts) merged as `/blog` section.
+Decentralized Hugo static clone of filoz.org. Preserves exact Webflow HTML/CSS/JS — only CDN URLs changed to local paths. Deblog merged as `/blog` section (25 posts).
 
 ## Architecture
 
@@ -30,7 +30,7 @@ content/
 ├── resources/_index.md     # Resources (wf_page: 66d8ad27d0cac9d775e009b4)
 └── blog/
     ├── _index.md           # Blog index (wf_page: 66d8ad27d0cac9d775e009ad, cascades to posts)
-    └── *.md                # 24 blog posts
+    └── *.md                # 25 blog posts
 static/
 ├── css/                    # webflow.css, fonts.css, common.css, blog CSS
 ├── js/                     # jQuery, Webflow chunks, Finsweet CMS slider
@@ -83,7 +83,7 @@ Use `--disableFastRender` — Hugo's Fast Render mode caches templates and won't
 
 ## Deployment
 
-GitHub Actions on push to `main` (`.github/workflows/deploy.yaml`):
+GitHub Actions on push to `main` (`.github/workflows/deploy.yaml` — exists on `origin/main`, not in local working tree):
 1. Hugo build with minification
 2. Deploy to GitHub Pages → https://desite.filoz.org
 3. Pin to Filecoin mainnet via `npx filecoin-pin@0.17.0` (Provider ID 1, ezpdpz-main)
@@ -105,3 +105,18 @@ GitHub Actions on push to `main` (`.github/workflows/deploy.yaml`):
 - **Provider ID:** 1 (ezpdpz-main)
 - **Latest CID:** `bafybeidfsh36hmxhxfrnk4mhfeervalumzotlwa2iph5qyjbxm4n2biw7m` (Data Set 279)
 - **Setup:** `filecoin-pin payments setup --auto --mainnet`
+
+## Adding Blog Posts from Medium Export
+
+Medium export zip contains HTML files in `posts/`. To convert:
+1. Extract the target post HTML from the zip
+2. Download featured image (`cdn-images-1.medium.com`) → `static/images/blog/`
+3. Convert HTML to Markdown, matching existing frontmatter format (title, description, date, slug, featured_image)
+4. YouTube iframes → `{{< youtube VIDEO_ID >}}` Hugo shortcode
+5. Em dashes in Medium HTML (`—`) → double hyphens (`--`) per user preference
+6. Filename: `YYYY-MM-DD_Title-Slug-MEDIUM_ID.md`
+
+## Content Update Guide
+
+- `SKILL.md` — AI assistant guide for making content updates (team, blog, events, resources)
+- `RUNBOOK.md` — Human-readable version (may be removed in future)
