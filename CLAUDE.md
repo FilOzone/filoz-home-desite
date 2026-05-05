@@ -112,15 +112,17 @@ Medium export zip contains HTML files in `posts/`. To convert:
 1. Extract the target post HTML from the zip
 2. Download featured image (`cdn-images-1.medium.com`) → `static/images/blog/`
 3. Convert HTML to Markdown, matching existing frontmatter format (title, description, date, slug, featured_image)
-4. YouTube iframes → `{{< youtube VIDEO_ID >}}` Hugo shortcode
-5. Em dashes in Medium HTML (`—`) → double hyphens (`--`) per user preference
-6. Filename: `YYYY-MM-DD_Title-Slug-MEDIUM_ID.md`
+4. `description` field must be: `"Author (@handle) - Opening sentence of the article"` (not just the author name -- this text appears on the blog listing page)
+5. Author line in body must link Twitter: `Author Name ([@handle](https://x.com/handle))`
+6. YouTube iframes → `{{< youtube VIDEO_ID >}}` Hugo shortcode
+7. Em dashes in Medium HTML (`—`) → double hyphens (`--`) per user preference
+8. Filename: `YYYY-MM-DD_Title-Slug-MEDIUM_ID.md`
 
 ## Updating Events
 
 Fetch https://www.filoz.org/events to get current dates, times, and Luma links from the live Webflow site (source of truth). Update both:
-- `layouts/events/list.html` — all 3 event cards (date, time, Luma URL)
-- `layouts/index.html` ~line 1113 — homepage featured event (date, time, Luma URL)
+- `layouts/events/list.html` — match the live site's card count exactly (Webflow CMS drops cards when no event is scheduled). Add or remove `<div role="listitem" class="w-dyn-item">…</div>` blocks as needed.
+- `layouts/index.html` ~line 1113 — homepage featured event (use the next upcoming event from the events page).
 
 ## Content Update Guide
 
